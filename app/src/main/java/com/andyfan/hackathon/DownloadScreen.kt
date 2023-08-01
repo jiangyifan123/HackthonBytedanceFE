@@ -45,16 +45,18 @@ fun DownloadScreen() {
             .verticalScroll(rememberScrollState()),
         shape = RoundedCornerShape(10.dp)
     ) {
+        var videoUrl by remember {
+            mutableStateOf("")
+        }
+
+        videoUrl = "https://andyfanfan.myds.me/kodexplorer/data/User/admin/home/%E8%A7%86%E9%A2%91/SampleVideo_1280x720_1mb.mp4"
+
         ConstraintLayout{
             val (title, video, nextButton) = createRefs()
 
-            var videoUrl by remember {
-                mutableStateOf("")
-            }
-
             val guideLine = createGuidelineFromTop(0.1f)
 
-            Text(text = "Preview",
+            Text(text = videoUrl,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.constrainAs(title) {
@@ -65,8 +67,6 @@ fun DownloadScreen() {
                 }
             )
 
-            videoUrl = "https://andyfanfan.myds.me/kodexplorer/data/User/admin/home/%E8%A7%86%E9%A2%91/SampleVideo_1280x720_1mb.mp4"
-//            videoUrl = "https://vod-progressive.akamaized.net/exp=1690882893~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F2670%2F7%2F188350983%2F623685558.mp4~hmac=102591306689bee5c7bcc80fb16c654314a27eb9285ae4fd560d84fda95338cb/vimeo-prod-skyfire-std-us/01/2670/7/188350983/623685558.mp4"
             VideoPlayer(
                 videoUrl = videoUrl,
                 modifier = Modifier
@@ -80,9 +80,7 @@ fun DownloadScreen() {
             )
 
             Button(
-                onClick = {
-                    videoUrl = "https://vod-progressive.akamaized.net/exp=1690882893~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F2670%2F7%2F188350983%2F623685558.mp4~hmac=102591306689bee5c7bcc80fb16c654314a27eb9285ae4fd560d84fda95338cb/vimeo-prod-skyfire-std-us/01/2670/7/188350983/623685558.mp4"
-                },
+                onClick = {  },
                 modifier = Modifier.constrainAs(nextButton) {
                     top.linkTo(video.bottom, margin = 16.dp)
                     start.linkTo(parent.start)
