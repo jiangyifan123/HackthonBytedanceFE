@@ -1,5 +1,6 @@
 package com.andyfan.hackathon
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -83,6 +84,8 @@ fun PhotoList(photos: List<photoItems>, navController: NavController) {
 }
 
 fun getVideoByPhoto(photoId: Int, navController: NavController) {
+    Store.photoId = photoId
+    Log.d("Yifan.debug", "request photoId: $photoId, message: ${Store.message}")
     navController.navigate(route = Screen.Preview.router)
 }
 

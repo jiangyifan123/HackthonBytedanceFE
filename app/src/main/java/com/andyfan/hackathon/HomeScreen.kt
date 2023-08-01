@@ -1,6 +1,5 @@
 package com.andyfan.hackathon
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -83,6 +82,7 @@ fun HomeScreen(
 
             Button(
                 onClick = {
+                    Store.message = textState
                     navController.navigate(route = Screen.Demo.router)
                 },
                 modifier = Modifier.constrainAs(nextButton) {

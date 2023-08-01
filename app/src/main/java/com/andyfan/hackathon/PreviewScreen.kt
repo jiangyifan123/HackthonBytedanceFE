@@ -1,6 +1,7 @@
 package com.andyfan.hackathon
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,12 +45,8 @@ fun PreviewScreen() {
             .verticalScroll(rememberScrollState()),
         shape = RoundedCornerShape(10.dp)
     ) {
-        var videoUrl by remember {
-            mutableStateOf("")
-        }
 
-        videoUrl = "https://andyfanfan.myds.me/kodexplorer/data/User/admin/home/%E8%A7%86%E9%A2%91/SampleVideo_1280x720_1mb.mp4"
-
+//        Store.videoUrl = "https://vod-progressive.akamaized.net/exp=1690901002~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F2671%2F7%2F188355959%2F625866489.mp4~hmac=d69aac4835cffcaa6d72b2a81ceaaf1b28d28e6dc7f6ea81b6c79303787e8e6b/vimeo-prod-skyfire-std-us/01/2671/7/188355959/625866489.mp4"
         ConstraintLayout{
             val (title, video, nextButton) = createRefs()
 
@@ -67,7 +64,7 @@ fun PreviewScreen() {
             )
 
             VideoPlayer(
-                videoUrl = videoUrl,
+                videoUrl = Store.videoUrl,
                 modifier = Modifier
                     .constrainAs(video) {
                         top.linkTo(title.bottom)
@@ -79,7 +76,10 @@ fun PreviewScreen() {
             )
 
             Button(
-                onClick = {  },
+                onClick = {
+                    Log.d("Yifan.debug", "downloading ${Store.videoUrl}")
+                    Utils.downloader.downloadFile(Store.videoUrl)
+                },
                 modifier = Modifier.constrainAs(nextButton) {
                     top.linkTo(video.bottom, margin = 16.dp)
                     start.linkTo(parent.start)

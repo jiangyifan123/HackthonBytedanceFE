@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val downloader = AndroidDownloader(this)
+            Utils.downloader =  AndroidDownloader(this)
 //            downloader.downloadFile("https://andyfanfan.myds.me/kodexplorer/data/User/admin/home/%E8%A7%86%E9%A2%91/SampleVideo_1280x720_1mb.mp4")
             HackathonTheme {
                 Surface(
