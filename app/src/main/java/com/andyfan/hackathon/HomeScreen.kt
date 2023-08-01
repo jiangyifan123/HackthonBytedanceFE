@@ -77,17 +77,17 @@ fun HomeScreen() {
                 shape = RoundedCornerShape(10.dp)
             )
 
-            Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.constrainAs(nextButton) {
-                    top.linkTo(messageInput.bottom, margin = 16.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
-            ) {
-                Text(text = "Next")
-            }
+//            Button(
+//                onClick = {  },
+//                modifier = Modifier.constrainAs(nextButton) {
+//                    top.linkTo(messageInput.bottom, margin = 16.dp)
+//                    start.linkTo(parent.start)
+//                    end.linkTo(parent.end)
+//                    bottom.linkTo(parent.bottom)
+//                }
+//            ) {
+//                Text(text = "Next")
+//            }
         }
     }
 }
