@@ -34,9 +34,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun DownloadScreen() {
+fun PreviewScreen() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +55,7 @@ fun DownloadScreen() {
 
             val guideLine = createGuidelineFromTop(0.1f)
 
-            Text(text = videoUrl,
+            Text(text = "Preview",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.constrainAs(title) {
@@ -117,4 +116,10 @@ fun VideoPlayer(videoUrl: String, modifier: Modifier) {
         },
         modifier = modifier.fillMaxSize()
     )
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PreviewPreviewScreen() {
+    PreviewScreen()
 }
