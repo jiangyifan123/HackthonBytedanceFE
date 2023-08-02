@@ -1,5 +1,6 @@
 package com.andyfan.hackathon
 
+import android.app.DownloadManager
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,12 +28,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DataSpec
+import com.google.android.exoplayer2.upstream.DataSpec.HTTP_METHOD_POST
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.gson.Gson
+import okio.ByteString.Companion.encode
+import java.net.URLEncoder
+
+data class GenerateVideoBody(val text: String, val image_id: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +87,7 @@ fun PreviewScreen() {
             Button(
                 onClick = {
                     Log.d("Yifan.debug", "downloading ${Store.videoUrl}")
-                    Utils.downloader.downloadFile(Store.videoUrl)
+                    Utils.downloader.downloadFile("http://michaelwu.duckdns.org:51320/v1/text-to-lipsync?image_id=${Store.photoId}&text=${URLEncoder.encode(Store.message, "UTF-8")}")
                 },
                 modifier = Modifier.constrainAs(nextButton) {
                     top.linkTo(video.bottom, margin = 16.dp)
@@ -102,7 +111,7 @@ fun VideoPlayer(videoUrl: String, modifier: Modifier) {
             Util.getUserAgent(context, context.packageName)
 
             val source = ProgressiveMediaSource.Factory(dataMediaSourceFactory).createMediaSource(
-                Uri.parse(videoUrl))
+                Uri.parse("http://michaelwu.duckdns.org:51320/v1/text-to-lipsync?image_id=${Store.photoId}&text=${URLEncoder.encode(Store.message, "UTF-8")}"))
 
             this.prepare(source)
         }

@@ -9,7 +9,7 @@ class AndroidDownloader(
     private val context: Context
 ): Downloader {
 
-    private val downloadManager = context.getSystemService(DownloadManager::class.java)
+    val downloadManager = context.getSystemService(DownloadManager::class.java)
 
     override fun downloadFile(url: String): Long {
         val request = DownloadManager.Request(url.toUri())
