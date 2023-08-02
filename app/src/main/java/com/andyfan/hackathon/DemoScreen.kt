@@ -15,29 +15,29 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
 fun DemoScreen(
     navController: NavController
 ) {
-    val photoList = listOf<photoItems>(
-        photoItems(R.drawable.hitler, 1, "Hitler"),
-        photoItems(R.drawable.mona_lisa, 2, "Mona Lisa"),
-        photoItems(R.drawable.mona_lisa, 2, "Mona Lisa"),
-        photoItems(R.drawable.mona_lisa, 2, "Mona Lisa"),
-        photoItems(R.drawable.mona_lisa, 2, "Mona Lisa"),
-        photoItems(R.drawable.mona_lisa, 2, "Mona Lisa"),
-    )
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,29 +56,37 @@ fun DemoScreen(
                 fontSize = 20.sp,
                 modifier = Modifier.padding(10.dp)
             )
-
-            PhotoList(photoList, navController)
+            PhotoList(navController)
         }
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun PhotoList(photos: List<photoItems>, navController: NavController) {
-    photos.forEach {
+fun PhotoList(navController: NavController) {
+    val retrofit = Retrofit.Builder()
+        .baseUrl("http://michaelwu.duckdns.org:51320")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    val api = retrofit.create(NetworkService::class.java)
+
+    var imageList by remember { mutableStateOf(emptyList<AvatarImage>()) }
+
+    LaunchedEffect(Unit) {
+        imageList = fetchPhotoList(api)
+    }
+
+    imageList.forEach {
         Image(
-            painter = painterResource(id = it.id),
-            contentDescription = it.name,
+            painter = rememberImagePainter("http://michaelwu.duckdns.org:51320${it.request_path}"),
+            contentDescription = "Image",
             modifier = Modifier
                 .fillMaxWidth()
                 .size(250.dp)
                 .padding(10.dp)
                 .clickable {
-                    getVideoByPhoto(photoId = it.photoId, navController = navController)
+                    getVideoByPhoto(photoId = it.image_id, navController = navController)
                 }
-        )
-        Text(
-            text = it.name,
-            fontWeight = FontWeight.Bold
         )
     }
 }
@@ -89,11 +97,10 @@ fun getVideoByPhoto(photoId: Int, navController: NavController) {
     navController.navigate(route = Screen.Preview.router)
 }
 
-data class photoItems(
-    val id: Int = 0,
-    val photoId: Int = 0,
-    val name: String = ""
-)
+suspend fun fetchPhotoList(api: NetworkService): List<AvatarImage> {
+    val response: Response<AvatarImageListApiResponse> = api.getImageListApiResponse()
+    return response.body()!!.result.images
+}
 
 @Composable
 @Preview(showBackground = true)
